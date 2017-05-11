@@ -18,7 +18,7 @@ namespace Projekt_SI
             this.imie = input_imie;
             this.specjalizacja = input_specka;
         }
-        public Boolean czy_ma_przedmiot(Przedmiot p)
+        public Boolean Czy_ma_przedmiot(Przedmiot p)
         {
             for (int i = 0; i < 5; i++)
             {

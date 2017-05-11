@@ -9,7 +9,7 @@ namespace Projekt_SI
     class Plany
     {
         public Zajecie[,] plan = new Zajecie[5, 40];//struktura do v2
-        public List<Zajecie> plann = new List<Zajecie>();
+        public List<Zajecie> plann = new List<Zajecie>();//v5
         public List<Sala> sale = new List<Sala>();
         public List<Wykladowca> wykladowcy = new List<Wykladowca>();
         public int semestr;
@@ -19,14 +19,14 @@ namespace Projekt_SI
         {
 
         }
-        public void dodaj_plan(Zajecie[,] input_plan)//v2
+        public void Dodaj_plan(Zajecie[,] input_plan)//v2
         {
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 40; j++)
                     plan_i[i, j] = 0;
             this.plan = (Zajecie[,])input_plan.Clone();
         }
-        public void kompatobilnosc()//przejscie na plan_i
+        public void Kompatobilnosc()//przejscie na plan_i
         {
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 40; j++)
@@ -37,18 +37,22 @@ namespace Projekt_SI
                     plan_i[z.i, z.j+j]++;
             }
         }
-        public void odejmij_z_plan_i(Zajecie z)
-        {
-            for (int j = 0; j < z.dlugosc; j++)
-                plan_i[z.i, z.j + j]--;
-        }
-        public int max_plan_i(Zajecie z)
+
+        public int Max_plan_i(Zajecie z)
         {
             int x = 0;
             for (int j = 0; j < z.dlugosc; j++)
                 if (x < plan_i[z.i, z.j + j])
                     x = plan_i[z.i, z.j + j];
             return x;
+        }
+        public Boolean Poprzednie_zajecie(int i, int j)
+        {
+            foreach(Zajecie z in plann)
+                if(z.i==i)
+                    if (z.j == j)
+                        return true;
+            return false;
         }
     }
     //public class Plany

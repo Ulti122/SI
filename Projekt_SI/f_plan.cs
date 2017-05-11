@@ -23,7 +23,7 @@ namespace Projekt_SI
             foreach(Zajecie z in ((Form1)Application.OpenForms[0]).Planki[plan_id].plann)
             {
                 for (int i = 0; i < z.dlugosc; i++)
-                    temp_ilosc[z.i, z.j + i] = ((Form1)Application.OpenForms[0]).Planki[plan_id].max_plan_i(z);
+                    temp_ilosc[z.i, z.j + i] = ((Form1)Application.OpenForms[0]).Planki[plan_id].Max_plan_i(z);
             }
             int[,] pozycja = new int[5, 40];
             for (int i = 0; i < 5; i++)
@@ -84,7 +84,7 @@ namespace Projekt_SI
                 this.Controls.Add(l);
                 this.Height = (60 + (40 + i * 20));
                 l.BackColor = kolor;
-                this.Size = new Size(szerokosc_butona * 5 + 100, (60 + (40 + i * 20)));
+                this.Size = new Size(szerokosc_butona * 5 + 115, (60 + (40 + i * 20)));
             }
             //real shit 
             int kto = plan_id;
@@ -94,7 +94,6 @@ namespace Projekt_SI
             {
                 Label l = new Label();
                 l.Location = new Point(((z.i * szerokosc_butona) + 100), ((z.j * 20) + 40));
-                //((Form1)Application.OpenForms[0]).Planki[kto].odejmij_z_plan_i(z);
                 l.Height = 20 * z.dlugosc;
                 l.Width = szerokosc_butona;
                 if (temp_ilosc[z.i, z.j]  > 1) 
@@ -110,12 +109,17 @@ namespace Projekt_SI
                         pozycja[z.i, z.j + j]--;
                     }  
                     if(z.j>0)
-                        while(pozycja[z.i, z.j-k] == temp_poz)
+                        for(int j=0;j<6;j++)
                         {
-                            if (pozycja[z.i, z.j - k] != temp_poz)
+                            if (((Form1)Application.OpenForms[0]).Planki[kto].Poprzednie_zajecie(z.i, z.j - k) == true)
+                            {
+                                if(pozycja[z.i, z.j - k]>0)
+                                    pozycja[z.i, z.j - k]--;
                                 break;
-                            pozycja[z.i, z.j - k]--;
-                            if (z.j - k > 0) 
+                            }
+                            else
+                                pozycja[z.i, z.j - k]--;
+                            if (z.j - k > 0)
                                 k++;
                             else
                                 break;
@@ -142,8 +146,13 @@ namespace Projekt_SI
                 l.TextAlign = ContentAlignment.MiddleCenter;
                 l.Visible = true;
                 l.BackColor = kolor;
+                l.MouseHover += new System.EventHandler(this.MouseHover);
                 this.Controls.Add(l);
             }
+        }
+        private new void MouseHover(object sender, EventArgs e)
+        {
+            //
         }
     }
 }

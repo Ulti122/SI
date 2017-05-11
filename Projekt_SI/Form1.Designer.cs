@@ -95,7 +95,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(374, 335);
+            this.button2.Location = new System.Drawing.Point(358, 455);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -106,7 +106,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(398, 387);
+            this.label2.Location = new System.Drawing.Point(382, 507);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(24, 13);
             this.label2.TabIndex = 6;
@@ -151,7 +151,7 @@
             // 
             // textBox
             // 
-            this.textBox.Location = new System.Drawing.Point(363, 364);
+            this.textBox.Location = new System.Drawing.Point(347, 484);
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(100, 20);
             this.textBox.TabIndex = 11;
@@ -159,7 +159,7 @@
             // 
             // watki_textBox
             // 
-            this.watki_textBox.Location = new System.Drawing.Point(604, 364);
+            this.watki_textBox.Location = new System.Drawing.Point(588, 484);
             this.watki_textBox.Name = "watki_textBox";
             this.watki_textBox.Size = new System.Drawing.Size(100, 20);
             this.watki_textBox.TabIndex = 12;

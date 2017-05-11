@@ -312,8 +312,9 @@ namespace Projekt_SI
                         }
                             ilosc_spelniajaca_kryterium++;
                 Double temp = ilosc_spelniajaca_kryterium;
-                int ilosc_grup = (int)Math.Ceiling(temp / Przedmioty[i].ilosc_w_grupie);
-                for(int j = 0; j<ilosc_grup;j++)
+
+               int ilosc_grup = (int)Math.Ceiling(temp / Przedmioty[i].ilosc_w_grupie);
+                for (int j = 0; j<ilosc_grup;j++)
                 {
                     int miejsca;
                     if (j == ilosc_grup - 1)
@@ -322,7 +323,10 @@ namespace Projekt_SI
                         miejsca = Przedmioty[i].ilosc_w_grupie;
 
                     Zajecie z = new Zajecie(Przedmioty[i],miejsca);
-                    z.grupa = j + 1;
+                    if (z.przedmiot.typ != "wykl")
+                        z.grupa = j + 1;
+                    else
+                        z.grupa = 0;
                     Zajecia.Add(z);
                     z = null;
                 }
@@ -1029,7 +1033,7 @@ namespace Projekt_SI
             int rand_czas_j;
             int rand_czas_i_licznik_p = 0;
             int rand_czas_i_licznik_f = 0;
-            int proby = 1000;
+            int proby = 250;
             int numer_wykladowcy;
             Boolean wykladowca_dostepny = false;
             Boolean wykladowca_ma_inne_zajecia = false;
@@ -1121,14 +1125,18 @@ namespace Projekt_SI
                                     {
                                         if (z.i == rand_czas_i)
                                         {
-                                            if (Enumerable.Range(z.j - 1, z.dlugosc + 1).Contains(rand_czas_j) || Enumerable.Range(z.j, z.dlugosc).Contains(rand_czas_j + z.dlugosc))
+                                            if (Enumerable.Range(z.j - 1, z.dlugosc + 1).Contains(rand_czas_j) || Enumerable.Range(z.j, z.dlugosc+1).Contains(rand_czas_j + temp_zajecie.dlugosc))
                                             {
                                                 if (z.przedmiot.specjalizacja == null || temp_zajecie.przedmiot.specjalizacja == null) 
                                                     shall_pass = false;
                                                 else if (z.przedmiot.multi_spec == false && temp_zajecie.przedmiot.multi_spec == false)
                                                 {
                                                     if (z.przedmiot.specjalizacja == temp_zajecie.przedmiot.specjalizacja)
-                                                        shall_pass = false;     
+                                                        if (z.grupa == temp_zajecie.grupa)
+                                                            shall_pass = false;
+                                                        else if(z.przedmiot.typ=="wykl"||temp_zajecie.przedmiot.typ == "wykl")
+                                                            shall_pass = false;
+
                                                 }
                                                 else if (z.przedmiot.multi_spec == false && temp_zajecie.przedmiot.multi_spec == true)
                                                 {
@@ -1137,7 +1145,10 @@ namespace Projekt_SI
                                                     {
                                                         if (z.przedmiot.specjalizacja == ss)
                                                         {
-                                                            shall_pass = false;
+                                                            if (z.grupa == temp_zajecie.grupa)
+                                                                shall_pass = false;
+                                                            else if (z.przedmiot.typ == "wykl" || temp_zajecie.przedmiot.typ == "wykl")
+                                                                shall_pass = false;
                                                         }
                                                     }
                                                 }
@@ -1148,7 +1159,10 @@ namespace Projekt_SI
                                                     {
                                                         if (temp_zajecie.przedmiot.specjalizacja == ss)
                                                         {
-                                                            shall_pass = false;
+                                                            if (z.grupa == temp_zajecie.grupa)
+                                                                shall_pass = false;
+                                                            else if (z.przedmiot.typ == "wykl" || temp_zajecie.przedmiot.typ == "wykl")
+                                                                shall_pass = false;
                                                         }
                                                     }
                                                 }
@@ -1159,7 +1173,10 @@ namespace Projekt_SI
                                                     foreach (String ss in temp)
                                                         foreach(String sss in tempo)
                                                             if (sss == ss)
-                                                                shall_pass = false;
+                                                                if (z.grupa == temp_zajecie.grupa)
+                                                                    shall_pass = false;
+                                                                else if (z.przedmiot.typ == "wykl" || temp_zajecie.przedmiot.typ == "wykl")
+                                                                    shall_pass = false;
                                                 }
                                             }
                                         }
@@ -1189,7 +1206,7 @@ namespace Projekt_SI
                 }
                 if (proby > 0)
                 {
-                    proby = 1000;
+                    proby = 250;
                     Planki.Add(p);
                     //ocen_je(p);//Nowa metoda dla multi
                    ocen_to_v5(Planki.IndexOf(p));
@@ -1197,7 +1214,7 @@ namespace Projekt_SI
                 }
                 else
                 {
-                    proby = 1000;
+                    proby = 250;
                     tries++;
                     p = null;
                 }
@@ -1466,7 +1483,7 @@ namespace Projekt_SI
                 foreach(Sala s in Sale)
                 {
                     for(int i=0;i<z.dlugosc;i++)
-                        s.dostepnosc_sali[z.i, z.j] = Planki[najlepszy_id].sale[Sale.IndexOf(s)].dostepnosc_sali[z.i, z.j+i];
+                        s.dostepnosc_sali[z.i, z.j+i] = Planki[najlepszy_id].sale[Sale.IndexOf(s)].dostepnosc_sali[z.i, z.j+i];
                 }     
             }
             Plany najlepszy_plan = Planki[najlepszy_id];
@@ -1483,7 +1500,7 @@ namespace Projekt_SI
                 if (Planki[i].semestr == semestr)
                     najlepszy_id = i;
             dopisz_studenta_v5(Planki[najlepszy_id].semestr, najlepszy_id);
-            Planki[najlepszy_id].kompatobilnosc();
+            Planki[najlepszy_id].Kompatobilnosc();
             poka_plana_v5(najlepszy_id);
             Planki.Sort();
         }
@@ -1502,7 +1519,7 @@ namespace Projekt_SI
                         {
                             if (Planki[id_planu].plan[i, j] != null && counter != 0)
                             {
-                                if (s.czy_ma_przedmiot(Planki[id_planu].plan[i, j].przedmiot) == false)
+                                if (s.Czy_ma_przedmiot(Planki[id_planu].plan[i, j].przedmiot) == false)
                                 {
                                     if (Planki[id_planu].plan[i, j].przedmiot.specjalizacja == null)
                                     {
@@ -1554,7 +1571,7 @@ namespace Projekt_SI
                     {
                         if(counter!=0)
                         {
-                            if(s.czy_ma_przedmiot(z.przedmiot)==false)
+                            if(s.Czy_ma_przedmiot(z.przedmiot)==false)
                             {
                                 if(z.przedmiot.specjalizacja==null)
                                 {
